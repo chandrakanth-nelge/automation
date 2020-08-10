@@ -16,34 +16,40 @@ import org.testng.Assert;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import com.techmojo.web.automation.pages.LandingPage;
+import com.techmojo.web.automation.pages.LoginPage;
 import com.techmojo.web.automation.util.DateUtils;
 
 public class PageBase {
 	protected WebDriver driver;
 	protected ExtentTest logger;
-	
+
+	public PageBase() {
+
+	}
+
 	public PageBase(WebDriver driver, ExtentTest logger) {
 		this.driver = driver;
 		this.logger = logger;
 	}
-	
+
 	/****************** Open URL ***********************/
-	public LandingPage openURL(String websiteURLKey) {
-		LandingPage landingPage = null;
+	public LoginPage openURL(String websiteURLKey) {
+		LoginPage loginPage = null;
 		try {
 			logger.log(Status.INFO, "Opening the WebSite");
-			driver.get("prop.getProperty(websiteURLKey)");
+			driver.get(websiteURLKey);
 			reportPass(websiteURLKey + " Identified Successfully");
-			landingPage = new LandingPage(logger);
-			PageFactory.initElements(driver, landingPage);
+			loginPage = new LoginPage(driver, logger);
+			PageFactory.initElements(driver, loginPage);
 		} catch (Exception e) {
+			System.out.println("openURL == " + e.getMessage());
 			reportFail(e.getMessage());
+			e.printStackTrace();
 		}
-		
-		return landingPage;
+
+		return loginPage;
 	}
-	
+
 	/****************** Get Page Title ***********************/
 	public void getTitle(String expectedTitle) {
 		try {
@@ -53,7 +59,7 @@ public class PageBase {
 			reportFail(e.getMessage());
 		}
 	}
-	
+
 	/****************** Select value From DropDown ***********************/
 	public void selectDropDownValue(WebElement webElement, String value) {
 		try {
@@ -64,7 +70,7 @@ public class PageBase {
 			reportFail(e.getMessage());
 		}
 	}
-	
+
 	/****************** Verify Element is Present ***********************/
 	public void veriyElementIsDisplayed(WebElement webElement) {
 		try {
@@ -77,7 +83,7 @@ public class PageBase {
 			reportFail(e.getMessage());
 		}
 	}
-	
+
 	/****************** Get All Elements of DropDown ***********************/
 	public List<WebElement> getAllElementsOfDropDown(WebElement webElement) {
 		List<WebElement> allElements = null;
@@ -111,7 +117,6 @@ public class PageBase {
 			reportFail(e.getMessage());
 		}
 	}
-	
 
 	/****************** Identify Element ***********************/
 	public WebElement getElement(String locatorKey) {
@@ -158,7 +163,7 @@ public class PageBase {
 	public void reportPass(String reportString) {
 		logger.log(Status.PASS, reportString);
 	}
-	
+
 	/****************** Capture Screen Shot ***********************/
 	public void takeScreenShotOnFailure() {
 		TakesScreenshot takeScreenShot = (TakesScreenshot) driver;

@@ -28,6 +28,7 @@ public class TestBase {
 
 	/****************** Invoke Browser ***********************/
 	public void invokeBrowser(String browserName) {
+		System.out.println(browserName);
 		try {
 			if (browserName.equalsIgnoreCase("Chrome")) {
 				System.setProperty("webdriver.chrome.driver",
@@ -49,6 +50,7 @@ public class TestBase {
 				driver = new SafariDriver();
 			}
 		} catch (Exception e) {
+			System.out.println("Error internal : " + e.getMessage());
 			logger.log(Status.FAIL, e.getMessage());
 		}
 
@@ -91,7 +93,7 @@ public class TestBase {
 	
 	@AfterMethod
 	public void flushReports() {
-		report.flush();
+		//report.flush();
 		driver.close();
 	}
 
